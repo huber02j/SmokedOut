@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -29,7 +31,7 @@ public class HomeFragment extends Fragment {
     private Calendar calendar;
     private String dateString;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // Initial Date information to display
         calendar = Calendar.getInstance();
@@ -46,6 +48,23 @@ public class HomeFragment extends Fragment {
             @Override
             public void onChanged(@Nullable String s) {
                 dateTimeDisplay.setText(dateString);
+            }
+        });
+
+        // Add new Goal button
+        final FloatingActionButton buttonAdd = root.findViewById(R.id.floatingActionButtonAdd);
+        final LinearLayout verticalLayout = root.findViewById(R.id.verticalGoalLayout); // acquire vertical layout to add goals to
+        buttonAdd.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                View newGoalView = inflater.inflate(R.layout.new_goal, verticalLayout, false);
+
+                ProgressBar progressBar = newGoalView.findViewById(R.id.progressBarGoal);
+                progressBar.incrementProgressBy(10);
+
+                TextView goalText = newGoalView.findViewById(R.id.textViewGoal);
+                goalText.setText("Should be user entered value");
+
+                verticalLayout.addView(newGoalView, verticalLayout.getChildCount());
             }
         });
 
