@@ -52,6 +52,7 @@ public class HomeFragment extends Fragment {
         });
 
         // Add new Goal button
+        /*
         final FloatingActionButton buttonAdd = root.findViewById(R.id.floatingActionButtonAdd);
         final LinearLayout verticalLayout = root.findViewById(R.id.verticalGoalLayout); // acquire vertical layout to add goals to
         buttonAdd.setOnClickListener(new View.OnClickListener(){
@@ -67,6 +68,7 @@ public class HomeFragment extends Fragment {
                 verticalLayout.addView(newGoalView, verticalLayout.getChildCount());
             }
         });
+        */
 
         // Next day button
         final FloatingActionButton buttonRight = root.findViewById(R.id.floatingActionButtonRight);

@@ -3,4 +3,23 @@
     <string name="title_goals">Goals</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="add_goal_header">Add Goal</string>
+    <string name="add_goal_name">Name your Goal</string>
+    <string name="add_goal_period">Choose Goal Period</string>
+    <string name="add_goal_daily">Daily</string>
+    <string name="add_goal_weekly">Weekly</string>
+    <string name="add_goal_monthly">Monthly</string>
+    <string name="add_goal_set">Set your Goal</string>
+    <string name="add_goal_days">Choose Days to Track Goal</string>
+    <string name="add_goal_motivation">Write Something to Motivate Yourself</string>
+    <string name="add_goal_more">or more times per day</string>
+    <string name="add_goal_less">or fewer times per day</string>
+    <string name="add_goal_submit">Submit</string>
+    <string name="add_goal_sunday">S</string>
+    <string name="add_goal_monday">M</string>
+    <string name="add_goal_tuesday">T</string>
+    <string name="add_goal_wednesday">W</string>
+    <string name="add_goal_thursday">T</string>
+    <string name="add_goal_friday">F</string>
+    <string name="add_goal_saturday">S</string>
 </resources>
