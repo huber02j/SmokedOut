@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "25269508421-3uac746ra1766aklq0jjhdg0vvga2sd6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smokedout",
+            "certificate_hash": "fc91c5d6bf84e3724c8cb7b1711398615c13bc48"
+          }
+        },
+        {
           "client_id": "25269508421-p9bv2io7dc7gm4f2pkkqu58hj04qo89n.apps.googleusercontent.com",
           "client_type": 3
         }
