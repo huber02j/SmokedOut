@@ -39,19 +39,19 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
         // Get goal name
         EditText nameGoalEditText = (EditText) findViewById(R.id.nameGoalEditText);
         String goalName = nameGoalEditText.getText().toString();
-        str += goalName;
+        str += "Goal Name: " + goalName + " ";
 
         // Get goal period
         ChipGroup chg = (ChipGroup) findViewById(R.id.goalPeriodChipGroup);
         int chipId = chg.getCheckedChipId();
         Chip periodChip = (Chip) findViewById(chg.getCheckedChipId());
         String period = periodChip.getText().toString();
-        str += period;
+        str += "Period: " + period + " ";
 
         // Get goal
         EditText numberEditText = (EditText) findViewById(R.id.goalNumberEditText);
         Integer num = Integer.parseInt(numberEditText.getText().toString());
-        str += num.toString();
+        str += "Frequency: " + num.toString() + " ";
 
         // Get selected less/more radio button
         Boolean isMore = true;
@@ -59,23 +59,23 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
         if (rgrp.getCheckedRadioButtonId() != R.id.moreRadioButton) {
             isMore = false;
         }
-        str += isMore.toString();
+        str += "Ratio: " + isMore.toString() + " ";
 
         // Record selected days
         ChipGroup daysChipGroup = (ChipGroup) findViewById(R.id.daysChipGroup);
         for (int i = 0; i < daysChipGroup.getChildCount(); i++) {
             Chip dayChip = (Chip) daysChipGroup.getChildAt(i);
             if (dayChip.isChecked()) {
-                str += dayChip.getText().toString();
+                str += "Selected Days: " + dayChip.getText().toString() + " ";
             }
         }
 
         // Get motivation string
         EditText motivationEditText = (EditText) findViewById(R.id.motivationEditText);
         String motivation = motivationEditText.getText().toString();
-        str += motivation;
+        str += "Motivation: " + motivation;
         // ADD TO DATABASE HERE (show toast for success/failure)
-        mMessage.push().setValue(motivation);
+        mMessage.push().setValue(str);
         // Just show message for now
         Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
 
