@@ -1,5 +1,6 @@
 package com.example.smokedout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,13 +13,22 @@ import android.widget.Toast;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class AddGoalActivity extends AppCompatActivity {
+public class AddGoalActivity extends AppCompatActivity implements ValueEventListener {
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_goal);
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mMessage = mFirebaseDatabase.getReference().child("New Goal");
     }
 
     /** Called when the user clicks the submit button */
@@ -63,13 +73,24 @@ public class AddGoalActivity extends AppCompatActivity {
         // Get motivation string
         EditText motivationEditText = (EditText) findViewById(R.id.motivationEditText);
         String motivation = motivationEditText.getText().toString();
-
+        str += motivation;
         // ADD TO DATABASE HERE (show toast for success/failure)
+        mMessage.push().setValue(motivation);
         // Just show message for now
         Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
 
         // Redirect to main page
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
     }
 }
