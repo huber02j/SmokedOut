@@ -83,15 +83,15 @@
 
         <RadioButton
             android:id="@+id/moreRadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="313dp"
+            android:layout_height="37dp"
             android:checked="true"
             android:text="@string/add_goal_more" />
 
         <RadioButton
             android:id="@+id/lessRadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="382dp"
+            android:layout_height="24dp"
             android:text="@string/add_goal_less" />
 
     </RadioGroup>
