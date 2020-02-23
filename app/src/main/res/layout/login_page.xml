@@ -1,41 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
 
     <EditText
         android:id="@+id/etName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="296dp"
+        android:layout_height="57dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="440dp"
         android:ems="10"
-        android:hint="Name "
-        android:inputType="textPersonName" />
+        android:hint="Email"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.235" />
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="296dp"
+        android:layout_height="57dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="360dp"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.356" />
 
     <Button
         android:id="@+id/etButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="246dp"
+        android:layout_height="47dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="268dp"
-        android:text="Login" />
+        android:text="Login"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="254dp"
+        android:layout_height="61dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="220dp"
-        android:text="No of attempts remaining:" />
-</RelativeLayout>
+        android:text="No of attempts remaining:"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.619" />
+
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="297dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="96dp"
+        android:text="New User? Sign Up!"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.859"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvInfo"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>
