@@ -103,7 +103,7 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
         DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
         GoalInfo goalInfo = new GoalInfo(goalName,period,Frequency,Days,motivation);
         myRef.setValue(goalInfo);
-        Toast.makeText(AddGoalActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AddGoalActivity.this, "Database Updated", Toast.LENGTH_SHORT).show();
     }
 
     @Override

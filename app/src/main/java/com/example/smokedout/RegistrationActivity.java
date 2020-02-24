@@ -81,7 +81,7 @@ public class RegistrationActivity extends AppCompatActivity {
         userEmail = (EditText)findViewById(R.id.etUserEmail);
         regButton = (Button)findViewById(R.id.Register);
         userLogin = (TextView)findViewById(R.id.tvUserLogin);
-        userAge = (EditText)findViewById(R.id.etAge);
+        userAge = (EditText)findViewById(R.id.etThisAge);
     }
 
     private Boolean validateLogin(){
