@@ -1,17 +1,19 @@
 package com.example.smokedout;
 
 public class GoalInfo {
-    public String goalName;
-    public String goalPeriod;
-    public String goalFrequency;
-    public String Days;
-    public String Motivation;
+    public String name;
+    public String period;
+    public Integer number;
+    public Boolean orMore;
+    public String days;
+    public String motivation;
 
-    public GoalInfo(String goalName, String goalPeriod, String goalFrequency, String days, String motivation) {
-        this.goalName = goalName;
-        this.goalPeriod = goalPeriod;
-        this.goalFrequency = goalFrequency;
-        Days = days;
-        Motivation = motivation;
+    public GoalInfo(String name, String period, Integer number, Boolean orMore, String days, String motivation) {
+        this.name = name;
+        this.period = period;
+        this.number = number;
+        this.orMore = orMore;
+        this.days = days;
+        this.motivation = motivation;
     }
 }

@@ -22,17 +22,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class AddGoalActivity extends AppCompatActivity implements ValueEventListener {
-    DatabaseReference mMessage;
+
     private FirebaseAuth firebaseAuth;
-    String goalName, period, Frequency, Days, motivation;
+    DatabaseReference databaseGoalInfo;
+    String goalName, period, days, motivation;
     Integer num;
-    Boolean isMore;
+    Boolean orMore;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_goal);
+        databaseGoalInfo = FirebaseDatabase.getInstance().getReference("GoalInfo");
+
       //  mFirebaseDatabase = FirebaseDatabase.getInstance();
        // mMessage = mFirebaseDatabase.getReference().child("New Goal");
         firebaseAuth = FirebaseAuth.getInstance();
@@ -41,68 +44,62 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
 
     /** Called when the user clicks the submit button */
     public void onSubmit(View view) {
-        // String for temporary toast, remove later
-       // String str = "";
 
         // Get goal name
         EditText nameGoalEditText = (EditText) findViewById(R.id.nameGoalEditText);
         goalName = nameGoalEditText.getText().toString();
-      //  str += "Goal Name: " + goalName + " ";
 
         // Get goal period
         ChipGroup chg = (ChipGroup) findViewById(R.id.goalPeriodChipGroup);
         int chipId = chg.getCheckedChipId();
         Chip periodChip = (Chip) findViewById(chg.getCheckedChipId());
         period = periodChip.getText().toString();
-      //  str += "Period: " + period + " ";
 
         // Get goal
         EditText numberEditText = (EditText) findViewById(R.id.goalNumberEditText);
         num = Integer.parseInt(numberEditText.getText().toString());
 
         // Get selected less/more radio button
-        isMore = true;
+        orMore = true;
         RadioGroup rgrp = (RadioGroup) findViewById(R.id.moreLessRadioGroup);
         if (rgrp.getCheckedRadioButtonId() != R.id.moreRadioButton) {
-            isMore = false;
+            orMore = false;
         }
 
-        if(isMore){
-            Frequency = num + " or more times per day";
-        } else {
-            Frequency = num + " or fewer times per day";
-        }
-     //   str += "Ratio: " + isMore.toString() + " ";
-
-        // Record selected days
-        Days = "";
+        // Record selected days (bit string: i.e. SMTWTFS --> 0011000)
+        days = "";
         ChipGroup daysChipGroup = (ChipGroup) findViewById(R.id.daysChipGroup);
         for (int i = 0; i < daysChipGroup.getChildCount(); i++) {
             Chip dayChip = (Chip) daysChipGroup.getChildAt(i);
             if (dayChip.isChecked()) {
-                Days += dayChip.getText().toString() + " ";
+                days += "1";
+            }
+            else {
+                days += "0";
             }
         }
 
         // Get motivation string
         EditText motivationEditText = (EditText) findViewById(R.id.motivationEditText);
         motivation = motivationEditText.getText().toString();
-       // str += "Motivation: " + motivation;
-        // ADD TO DATABASE HERE (show toast for success/failure)
-      //  mMessage.push().setValue(str);
-        // Just show message for now
-      //  Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
+
+        // Add new goal
         sendUserData();
+
         // Redirect to main page
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
+    // Insert to database
     private void sendUserData(){
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
-        GoalInfo goalInfo = new GoalInfo(goalName,period,Frequency,Days,motivation);
-        myRef.setValue(goalInfo);
+
+        // Collect information and key for new goal
+        GoalInfo goalInfo = new GoalInfo(goalName, period, num, orMore, days, motivation);
+        String goalId = databaseGoalInfo.child(firebaseAuth.getUid()).push().getKey();
+
+        // Submit
+        databaseGoalInfo.child(firebaseAuth.getUid()).child(goalId).setValue(goalInfo);
         Toast.makeText(AddGoalActivity.this, "Database Updated", Toast.LENGTH_SHORT).show();
     }
 
