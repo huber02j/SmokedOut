@@ -1,10 +1,12 @@
 package com.example.smokedout.ui.home;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -15,11 +17,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.smokedout.GoalInfo;
 import com.example.smokedout.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -30,6 +40,9 @@ public class HomeFragment extends Fragment {
     private SimpleDateFormat dateFormat;
     private Calendar calendar;
     private String dateString;
+    private FirebaseAuth firebaseAuth;
+    DatabaseReference databaseGoalInfo;
+
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -37,19 +50,60 @@ public class HomeFragment extends Fragment {
         calendar = Calendar.getInstance();
         dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         dateString = dateFormat.format(calendar.getTime());
-
+        databaseGoalInfo = FirebaseDatabase.getInstance().getReference("GoalInfo");
+        firebaseAuth = FirebaseAuth.getInstance();
 
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        final View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Display Date at top
+        // Display date at top
         final TextView dateTimeDisplay = root.findViewById(R.id.dayDisplay);
-        homeViewModel.getText().observe(this, new Observer<String>() {
+        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 dateTimeDisplay.setText(dateString);
             }
         });
+
+        // Array for all user's goals (only goal names for now)
+        final ArrayList<String> allGoals = new ArrayList<String>();
+        DatabaseReference databaseUserGoal = databaseGoalInfo.child(firebaseAuth.getUid());
+
+        // Display all goals in edit text
+        databaseUserGoal.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+
+                // Get new goal view
+                final LinearLayout verticalLayout = root.findViewById(R.id.verticalGoalLayout);
+
+                for (DataSnapshot goal : snapshot.getChildren()) {
+
+                    // Get name of goal
+                    String goalInfo = (String) goal.child("name").getValue();
+                    allGoals.add(goalInfo);
+
+                    View newGoalView = inflater.inflate(R.layout.new_goal, verticalLayout, false);
+
+                    ProgressBar progressBar = newGoalView.findViewById(R.id.progressBarGoal);
+                    progressBar.incrementProgressBy(10);
+
+                    TextView goalText = newGoalView.findViewById(R.id.textViewGoal);
+                    goalText.setText(goalInfo);
+
+                    verticalLayout.addView(newGoalView, verticalLayout.getChildCount());
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         // Add new Goal button
         /*
