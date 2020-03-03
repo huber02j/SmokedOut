@@ -22,4 +22,7 @@
     <string name="add_goal_thursday">T</string>
     <string name="add_goal_friday">F</string>
     <string name="add_goal_saturday">S</string>
+    <string name="channel_name">NOTIFICATION_CHANNEL_NAME</string>
+    <string name="channel_description">Notification_channel_description</string>
+    <string name="CHANNEL_ID">10001</string>
 </resources>
