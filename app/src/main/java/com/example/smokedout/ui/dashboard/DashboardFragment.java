@@ -36,22 +36,16 @@ public class DashboardFragment extends Fragment {
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-
-//        Button createNotificationButton = root.findViewById(R.id.button_create_notification);
-//
-//        createNotificationButton.setOnClickListener(new View.OnClickListener() {
+//        dashboardViewModel.getText().observe(this(), new Observer<String>() {
 //            @Override
-//            public void onClick(View v) {
-//                // Creates a notification
-//                //scheduleNotification(getNotification("HEYO Notification"),5000);
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
 //            }
 //        });
+
+
+
+
 
         return root;
     }
