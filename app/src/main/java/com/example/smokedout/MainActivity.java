@@ -47,6 +47,12 @@ public class  MainActivity extends AppCompatActivity {
 
     }
 
+    /** Called when the user clicks the add button */
+    public void addGoal(View view) {
+        Intent intent = new Intent(this, AddGoalActivity.class);
+        startActivity(intent);
+    }
+
     private void setAlarmNotification(String title, String content) {
         Log.d("Alarm Notification", "setAlarmNotification: ");
         Notification notification = addNotification(title,content); //Create a new notification
