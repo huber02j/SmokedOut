@@ -53,6 +53,7 @@ public class  MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
     private void setAlarmNotification(String title, String content) {
         Log.d("Alarm Notification", "setAlarmNotification: ");
         Notification notification = addNotification(title,content); //Create a new notification

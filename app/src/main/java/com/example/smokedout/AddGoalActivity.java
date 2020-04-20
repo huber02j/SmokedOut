@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -21,13 +22,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.lang.System.out;
+
 public class AddGoalActivity extends AppCompatActivity implements ValueEventListener {
+
+    private SimpleDateFormat dateFormat;
+    private Date date;
+
 
     private FirebaseAuth firebaseAuth;
     DatabaseReference databaseGoalInfo;
     String goalName, period, days, motivation;
     Integer num;
     Boolean orMore;
+//    String test;
+    Map<String, Boolean> checks = new HashMap<>();
 
 
     @Override
@@ -36,8 +52,8 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
         setContentView(R.layout.activity_add_goal);
         databaseGoalInfo = FirebaseDatabase.getInstance().getReference("GoalInfo");
 
-      //  mFirebaseDatabase = FirebaseDatabase.getInstance();
-       // mMessage = mFirebaseDatabase.getReference().child("New Goal");
+//        mFirebaseDatabase = FirebaseDatabase.getInstance();
+//        mMessage = mFirebaseDatabase.getReference().child("New Goal");
         firebaseAuth = FirebaseAuth.getInstance();
 
     }
@@ -83,6 +99,14 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
         EditText motivationEditText = (EditText) findViewById(R.id.motivationEditText);
         motivation = motivationEditText.getText().toString();
 
+
+        // Initialize the checks dict with the date
+        date = new Date();
+        dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        String day = dateFormat.format(date);
+        checks.put(day, new Boolean(false)); //Set initially to false so they can check it off
+
+
         // Add new goal
         sendUserData();
 
@@ -95,7 +119,7 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
     private void sendUserData(){
 
         // Collect information and key for new goal
-        GoalInfo goalInfo = new GoalInfo(goalName, period, num, orMore, days, motivation);
+        GoalInfo goalInfo = new GoalInfo(goalName, period, num, orMore, days, motivation, checks);
         String goalId = databaseGoalInfo.child(firebaseAuth.getUid()).push().getKey();
 
         // Submit
@@ -105,11 +129,12 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+        Log.d("onDataChange called", "data change");
     }
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
+        out.println("onCancelled called");
 
     }
 }
