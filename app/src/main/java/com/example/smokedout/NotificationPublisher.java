@@ -12,6 +12,8 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.Random;
+
 
 public class NotificationPublisher extends BroadcastReceiver {
     public static String NOTIFICATION_ID = "notification-id" ;
@@ -23,7 +25,10 @@ public class NotificationPublisher extends BroadcastReceiver {
 
         Log.d("notification", "onReceive: inside");
 //        int id = intent.getIntExtra(NOTIFICATION_ID, 0); //In case you need different id
-        int id = R.string.Notification_ID;
+//        int id = R.string.Notification_ID;
+        Random random = new Random();
+        int id = random.nextInt(9999 - 1000) + 1000;
+
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(id, notification);
 

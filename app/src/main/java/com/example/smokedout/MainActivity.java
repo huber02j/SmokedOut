@@ -1,18 +1,27 @@
 package com.example.smokedout;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,8 +33,19 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+
 public class  MainActivity extends AppCompatActivity {
 //    Button notificationButton;
+    private String motivation = ""; //Used for motivational notification
+    private Calendar motivationCal = Calendar.getInstance();
+    int mYear;
+    int mMonth;
+    int mDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +63,10 @@ public class  MainActivity extends AppCompatActivity {
 
         //Set up the notification channel when the app starts
         createNotificationChannel();
-        setAlarmNotification("Notification Title", "Notification Content");
+        long futureInMillis = SystemClock.elapsedRealtime() + 1000;
+
+        setAlarmNotification("Notification Title", "Notification Content", futureInMillis);
+        setAlarmNotification("Notification Title", "Second", futureInMillis+2000);
 
     }
 
@@ -53,8 +76,82 @@ public class  MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /** Called to set a motivational notification **/
+    public void motivationReminder(View view){
 
-    private void setAlarmNotification(String title, String content) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Motivational Text");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                motivation = input.getText().toString();
+                Toast.makeText(MainActivity.this, motivation, Toast.LENGTH_SHORT).show();
+                setMotivationDate();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
+    }
+
+    private void setMotivationDate(){
+        Calendar calendar = Calendar.getInstance();
+
+        int YEAR = calendar.get(Calendar.YEAR);
+        int MONTH = calendar.get(Calendar.MINUTE);
+        int DATE = calendar.get(Calendar.DATE);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int date) {
+                mYear = year;
+                mMonth = month;
+                mDate = date;
+                setMotivationTime();
+            }
+        }, YEAR, MONTH, DATE);
+
+        datePickerDialog.show();
+    }
+
+    private void setMotivationTime(){
+        Calendar calendar = Calendar.getInstance();
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hour, int minute) {
+                motivationCal.set(Calendar.YEAR, mYear);
+                motivationCal.set(Calendar.MONTH, mMonth);
+                motivationCal.set(Calendar.DATE, mDate);
+                motivationCal.set(Calendar.HOUR, hour);
+                motivationCal.set(Calendar.MINUTE, minute);
+
+                long millis = motivationCal.getTimeInMillis();
+                long futureInMillis = millis - SystemClock.elapsedRealtime();
+
+
+                setAlarmNotification("Smoked OUT!", motivation, futureInMillis);
+            }
+        }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE),true);
+
+        timePickerDialog.show();
+    }
+
+    private void setAlarmNotification(String title, String content, long futureInMillis) {
         Log.d("Alarm Notification", "setAlarmNotification: ");
         Notification notification = addNotification(title,content); //Create a new notification
 
@@ -62,13 +159,13 @@ public class  MainActivity extends AppCompatActivity {
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
 
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification); //Pack notification into intent
-//      notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 0); //If you need to pass a different id each time
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, Calendar.getInstance().getTimeInMillis()); //If you need to pass a different id each time
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int)System.currentTimeMillis(), notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        long futureInMillis = SystemClock.elapsedRealtime() + 1000;
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+//        Log.d("ALARM", )
         Log.d("ALARM", "setAlarmNotification: Set alarm");
     }
 
