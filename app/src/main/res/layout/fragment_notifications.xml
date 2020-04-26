@@ -35,6 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#F44336"
+                android:onClick="addSmokeTimes"
                 android:text="Smoked"
                 app:backgroundTint="#F88E86"
                 app:layout_constraintBottom_toBottomOf="parent"
