@@ -24,6 +24,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -37,14 +40,15 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 
 public class  MainActivity extends AppCompatActivity {
 //    Button notificationButton;
     private String motivation = ""; //Used for motivational notification
     private Calendar motivationCal = Calendar.getInstance();
-    int mYear;
-    int mMonth;
-    int mDate;
+//    int mYear;
+//    int mMonth;
+//    int mDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +67,28 @@ public class  MainActivity extends AppCompatActivity {
 
         //Set up the notification channel when the app starts
         createNotificationChannel();
-        long futureInMillis = SystemClock.elapsedRealtime() + 1000;
 
-        setAlarmNotification("Notification Title", "Notification Content", futureInMillis);
-        setAlarmNotification("Notification Title", "Second", futureInMillis+2000);
+        //Used for testing notification system
+//        long futureInMillis = System.currentTimeMillis() + 1000;
+//        Calendar cal = Calendar.getInstance();
+//
+//        setAlarmNotification("Notification Title", "Notification Content", futureInMillis);
+//        setAlarmNotification("Notification Title", "Second", futureInMillis+2000);
+//        setAlarmNotification("Notification Title", "Third", cal.getTimeInMillis() + 5000);
 
+    }
+
+    /** Add smoke times to database **/
+    public void addSmokeTimes(View view){
+        DatabaseReference databaseSmokeTimes = FirebaseDatabase.getInstance().getReference("SmokeTimes");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
+        Date smokeDate = Calendar.getInstance().getTime();
+        String timeID = databaseSmokeTimes.child(firebaseAuth.getUid()).push().getKey();
+
+        // Submit
+        databaseSmokeTimes.child(firebaseAuth.getUid()).child(timeID).setValue(smokeDate);
+        Toast.makeText(this, "Database Updated", Toast.LENGTH_SHORT).show();
     }
 
     /** Called when the user clicks the add button */
@@ -113,17 +134,18 @@ public class  MainActivity extends AppCompatActivity {
 
         int YEAR = calendar.get(Calendar.YEAR);
         int MONTH = calendar.get(Calendar.MINUTE);
-        int DATE = calendar.get(Calendar.DATE);
+        int DAY_OF_MONTH = calendar.get(Calendar.DAY_OF_MONTH);
+
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int date) {
-                mYear = year;
-                mMonth = month;
-                mDate = date;
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                motivationCal.set(Calendar.YEAR, year);
+                motivationCal.set(Calendar.MONTH, month);
+                motivationCal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 setMotivationTime();
             }
-        }, YEAR, MONTH, DATE);
+        }, YEAR, MONTH, DAY_OF_MONTH);
 
         datePickerDialog.show();
     }
@@ -134,17 +156,15 @@ public class  MainActivity extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
-                motivationCal.set(Calendar.YEAR, mYear);
-                motivationCal.set(Calendar.MONTH, mMonth);
-                motivationCal.set(Calendar.DATE, mDate);
                 motivationCal.set(Calendar.HOUR, hour);
                 motivationCal.set(Calendar.MINUTE, minute);
 
                 long millis = motivationCal.getTimeInMillis();
                 long futureInMillis = millis - SystemClock.elapsedRealtime();
+                Date date = motivationCal.getTime();
+                long delay = date.getTime();
 
-
-                setAlarmNotification("Smoked OUT!", motivation, futureInMillis);
+                setAlarmNotification("Smoked OUT!", motivation, delay);
             }
         }, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE),true);
 
@@ -159,13 +179,13 @@ public class  MainActivity extends AppCompatActivity {
         Intent notificationIntent = new Intent(this, NotificationPublisher.class);
 
         notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification); //Pack notification into intent
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, Calendar.getInstance().getTimeInMillis()); //If you need to pass a different id each time
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, System.currentTimeMillis()); //If you need to pass a different id each time
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int)System.currentTimeMillis(), notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
-//        Log.d("ALARM", )
+        alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+        Log.d("ALARM", "time = " + futureInMillis);
         Log.d("ALARM", "setAlarmNotification: Set alarm");
     }
 
