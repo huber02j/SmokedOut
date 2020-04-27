@@ -1,7 +1,5 @@
 package com.example.smokedout;
 
-import java.util.Date;
-import java.util.Dictionary;
 import java.util.Map;
 
 public class GoalInfo {

@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 public class RegistrationActivity extends AppCompatActivity {
 
      public EditText userName, userPassword, userEmail, userAge;
@@ -28,7 +30,7 @@ public class RegistrationActivity extends AppCompatActivity {
      String email, name, age, password;
      private FirebaseAuth firebaseAuth;
      private static final String TAG = "LoginActivity";
-
+     DatabaseReference databaseUserProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,21 +38,31 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
         setupUIViews();
         firebaseAuth = FirebaseAuth.getInstance();
+        databaseUserProfile = FirebaseDatabase.getInstance().getReference("UserProfile");
 
         regButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(validateLogin()){
                     //update data to database
-                    String user_email = userEmail.getText().toString().trim();
-                    String user_password = userPassword.getText().toString().trim();
+                    final String user_email = userEmail.getText().toString().trim();
+                    final String user_password = userPassword.getText().toString().trim();
+                    final String user_name = userName.getText().toString().trim();
+                    final Integer user_age = Integer.parseInt(userAge.getText().toString().trim());
+                    final ArrayList<String> friends = new ArrayList<String>();
 
                     firebaseAuth.createUserWithEmailAndPassword(user_email,user_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) {
-                               // sendUserData();
                                 Toast.makeText(RegistrationActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+
+                                // Add user information
+                                friends.add(firebaseAuth.getUid());
+                                UserProfile userProfile = new UserProfile(user_email, user_name, user_age, friends);
+                                databaseUserProfile.child(firebaseAuth.getUid()).setValue(userProfile);
+
+                                // Redirect to login
                                 startActivity(new Intent(RegistrationActivity.this,LoginActivity.class));
                             } else {
                                 Toast.makeText(RegistrationActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
@@ -62,6 +74,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             Log.w(TAG,"Error",e);
                         }
                     });
+
                 }
             }
         });
@@ -104,7 +117,8 @@ public class RegistrationActivity extends AppCompatActivity {
     private void sendUserData(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
-        UserProfile userProfile = new UserProfile(age,email,name);
+        ArrayList<String> friends = new ArrayList<String>();
+        UserProfile userProfile = new UserProfile(email, name, Integer.parseInt(age), new ArrayList<String>());
         myRef.setValue(userProfile);
     }
 

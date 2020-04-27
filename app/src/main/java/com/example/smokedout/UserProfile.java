@@ -1,13 +1,17 @@
 package com.example.smokedout;
+import java.util.ArrayList;
 
 public class UserProfile {
-    public String userAge;
     public String userEmail;
     public String userName;
+    public Integer userAge;
+    public ArrayList<String> friends;
 
-    public UserProfile(String userAge, String userEmail, String userName) {
-        this.userAge = userAge;
+
+    public UserProfile(String userEmail, String userName, Integer userAge,  ArrayList<String> friends) {
         this.userEmail = userEmail;
         this.userName = userName;
+        this.userAge = userAge;
+        this.friends = friends;
     }
 }

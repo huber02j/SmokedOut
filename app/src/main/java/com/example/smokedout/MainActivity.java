@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,10 +25,15 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -39,6 +45,7 @@ import androidx.navigation.ui.NavigationUI;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -214,4 +221,78 @@ public class  MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
+    public void addFriend(View view) {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.fragment_add_friend, null);
+        final EditText etEmail = alertLayout.findViewById(R.id.et_email);
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Add Friend");
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String email = etEmail.getText().toString();
+                System.out.println(email);
+                addFriendToDatabase(email);
+                Toast.makeText(MainActivity.this, "Username: " + email, Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
+    /** Add friend **/
+    public void addFriendToDatabase(final String teEmail){
+        final DatabaseReference databaseUser = FirebaseDatabase.getInstance().getReference("UserProfile");
+        databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snap) {
+                String targetUID = "";
+                String currUID = FirebaseAuth.getInstance().getUid();
+                ArrayList<String> friends = new ArrayList<>();
+                for (DataSnapshot ds: snap.getChildren()) {
+                    String email = (String) ds.child("userEmail").getValue();
+                    String UID = (String) ds.getKey();
+                    // Find UID given email
+                    if (email.equals(teEmail)) {
+                        targetUID = UID;
+                    }
+                    if (UID.equals(currUID)) {
+                        friends = (ArrayList) ds.child("friends").getValue();
+                    }
+                }
+                if (!targetUID.equals("")) {
+                    friends.add(targetUID);
+                    databaseUser.child(FirebaseAuth.getInstance().getUid()).child("friends").setValue(friends);
+                    Toast.makeText(MainActivity.this, "Friend successfully added!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "User with email does not exist.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+
+        // Submit
+        //databaseUser.child("friends").setValue(email);
+        Toast.makeText(this, "Database Updated", Toast.LENGTH_SHORT).show();
+    }
+
+    // Display all goals in edit text
+
 }
