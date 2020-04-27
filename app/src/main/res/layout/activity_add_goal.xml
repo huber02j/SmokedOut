@@ -47,7 +47,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/nameGoalEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="59dp"
                     android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -62,14 +62,15 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/goalPeriodChipGroup"
-                android:layout_width="314dp"
-                android:layout_height="65dp"
+                android:layout_width="368dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                app:chipSpacing="32dp"
+                app:chipSpacing="0dp"
+                app:chipSpacingHorizontal="80dp"
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
@@ -122,6 +123,7 @@
                     android:includeFontPadding="false"
                     android:inputType="number"
                     android:singleLine="true"
+                    android:text="1"
                     android:textSize="24sp" />
 
                 <RadioGroup
@@ -159,14 +161,15 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/daysChipGroup"
-                android:layout_width="348dp"
+                android:layout_width="384dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                app:chipSpacing="18dp">
+                app:chipSpacing="15dp"
+                app:chipSpacingHorizontal="6dp">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/sundayChip"
@@ -234,15 +237,6 @@
 
             </com.google.android.material.chip.ChipGroup>
 
-            <TextView
-                android:id="@+id/writeMotivationTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/add_goal_motivation" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/motivationLayout"
                 android:layout_width="379dp"
@@ -250,19 +244,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/motivationEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginRight="16dp"/>
 
             <Button
                 android:id="@+id/addGoalButton"
-                android:layout_width="wrap_content"
+                android:layout_width="377dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"

@@ -39,7 +39,7 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
 
     private FirebaseAuth firebaseAuth;
     DatabaseReference databaseGoalInfo;
-    String goalName, period, days, motivation;
+    String goalName, period, days;
     Integer num;
     Boolean orMore;
 //    String test;
@@ -89,16 +89,10 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
             Chip dayChip = (Chip) daysChipGroup.getChildAt(i);
             if (dayChip.isChecked()) {
                 days += "1";
-            }
-            else {
+            } else {
                 days += "0";
             }
         }
-
-        // Get motivation string
-        EditText motivationEditText = (EditText) findViewById(R.id.motivationEditText);
-        motivation = motivationEditText.getText().toString();
-
 
         // Initialize the checks dict with the date
         date = new Date();
@@ -119,7 +113,7 @@ public class AddGoalActivity extends AppCompatActivity implements ValueEventList
     private void sendUserData(){
 
         // Collect information and key for new goal
-        GoalInfo goalInfo = new GoalInfo(goalName, period, num, orMore, days, motivation, checks);
+        GoalInfo goalInfo = new GoalInfo(goalName, period, num, orMore, days, checks);
         String goalId = databaseGoalInfo.child(firebaseAuth.getUid()).push().getKey();
 
         // Submit
