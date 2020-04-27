@@ -289,10 +289,7 @@ public class  MainActivity extends AppCompatActivity {
         });
 
         // Submit
-        //databaseUser.child("friends").setValue(email);
         Toast.makeText(this, "Database Updated", Toast.LENGTH_SHORT).show();
     }
-
-    // Display all goals in edit text
 
 }

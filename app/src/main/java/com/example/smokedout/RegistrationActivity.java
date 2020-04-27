@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class RegistrationActivity extends AppCompatActivity {
      String email, name, age, password;
      private FirebaseAuth firebaseAuth;
      private static final String TAG = "LoginActivity";
-     DatabaseReference databaseUserProfile;
+     DatabaseReference databaseUserProfile, databaseMilestones;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setupUIViews();
         firebaseAuth = FirebaseAuth.getInstance();
         databaseUserProfile = FirebaseDatabase.getInstance().getReference("UserProfile");
+        databaseMilestones = FirebaseDatabase.getInstance().getReference("Milestones");
 
         regButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +63,11 @@ public class RegistrationActivity extends AppCompatActivity {
                                 friends.add(firebaseAuth.getUid());
                                 UserProfile userProfile = new UserProfile(user_email, user_name, user_age, friends);
                                 databaseUserProfile.child(firebaseAuth.getUid()).setValue(userProfile);
+
+                                // Add first milestone (added the app!)
+                                Milestone milestone = new Milestone(user_name, "Joined SmokedOut! :)", System.currentTimeMillis());
+                                String milestoneID = databaseMilestones.child(firebaseAuth.getUid()).push().getKey();
+                                databaseMilestones.child(firebaseAuth.getUid()).child(milestoneID).setValue(milestone);
 
                                 // Redirect to login
                                 startActivity(new Intent(RegistrationActivity.this,LoginActivity.class));
