@@ -97,6 +97,7 @@ public class NotificationsFragment extends Fragment {
         for (DataSnapshot user : currentDataSnapshot.getChildren()) {
 
             // Get all milestones from friends
+            
             if (friends.contains(user.getKey())) {
                 for (DataSnapshot milestone : user.getChildren()) {
                     String name = (String) milestone.child("name").getValue();
