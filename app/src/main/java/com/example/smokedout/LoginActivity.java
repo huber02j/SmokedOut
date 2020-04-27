@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void validate(String userName, String userPassword) {
-        progressDialog.setMessage("Everyone Can Quit!!");
+        progressDialog.setMessage("Anyone Can Quit!!");
         progressDialog.show();
         firebaseAuth.signInWithEmailAndPassword(userName, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
