@@ -95,7 +95,7 @@ public class  MainActivity extends AppCompatActivity {
 
         // Submit
         databaseSmokeTimes.child(firebaseAuth.getUid()).child(timeID).setValue(smokeDate);
-        Toast.makeText(this, "Database Updated", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Smoke Time Recorded", Toast.LENGTH_SHORT).show();
     }
 
     /** Called when the user clicks the add button */
@@ -125,7 +125,7 @@ public class  MainActivity extends AppCompatActivity {
                 setMotivationDate();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(null, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -231,7 +231,7 @@ public class  MainActivity extends AppCompatActivity {
         alert.setTitle("Add Friend");
         // this is set the view from XML inside AlertDialog
         alert.setView(alertLayout);
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(null, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -289,7 +289,7 @@ public class  MainActivity extends AppCompatActivity {
         });
 
         // Submit
-        Toast.makeText(this, "Database Updated", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Friend Successfully Added", Toast.LENGTH_SHORT).show();
     }
 
 }

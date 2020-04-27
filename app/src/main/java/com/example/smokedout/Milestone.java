@@ -22,6 +22,6 @@ public class Milestone implements Comparable<Milestone>{
         if (this.getDate() == null || m.getDate() == null) {
             return 0;
         }
-        return getDate().compareTo(m.getDate());
+        return m.getDate().compareTo(getDate());
     }
 }

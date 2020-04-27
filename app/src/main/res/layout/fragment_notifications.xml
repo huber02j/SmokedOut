@@ -30,22 +30,6 @@
             </ScrollView>
 
             <Button
-                android:id="@+id/smokebutton"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="12dp"
-                android:background="#F44336"
-                android:onClick="addSmokeTimes"
-                android:text="Smoked"
-                app:backgroundTint="#F88E86"
-                app:layout_constraintBottom_toTopOf="@+id/setNotificationButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button" />
-
-            <Button
                 android:id="@+id/button"
                 android:layout_width="370dp"
                 android:layout_height="44dp"
@@ -54,31 +38,13 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="12dp"
                 android:onClick="addFriend"
                 android:text="Add Friend"
-                app:layout_constraintBottom_toTopOf="@+id/smokebutton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
-            <Button
-                android:id="@+id/setNotificationButton"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="100dp"
-                android:background="#FFFFFF"
-                android:gravity="center"
-                android:onClick="motivationReminder"
-                android:text="Set Motivation Notification"
-                app:backgroundTint="#03DCF4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/smokebutton" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
