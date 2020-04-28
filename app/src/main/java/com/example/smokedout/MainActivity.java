@@ -129,7 +129,7 @@ public class  MainActivity extends AppCompatActivity {
 
                 // Set notification for tomorrow (if time has passed)
                 Calendar todayCalendar = Calendar.getInstance();
-                if (maxHour < todayCalendar.get(Calendar.HOUR_OF_DAY)) {
+                if (maxHour <= todayCalendar.get(Calendar.HOUR_OF_DAY)) {
                     todayCalendar.add(Calendar.DATE, 1);
                 }
 
