@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -34,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class DashboardFragment extends Fragment {
 
@@ -76,6 +78,12 @@ public class DashboardFragment extends Fragment {
 
                     TextView progressText = newProgressView.findViewById(R.id.GoalProgress);
                     progressText.setText(name);
+
+                    ProgressBar progressBar = newProgressView.findViewById(R.id.ProgressBar);
+                    Random rand = new Random();
+
+                    int n = rand.nextInt(50);
+                    progressBar.setProgress(n);
 
                     progressLayout.addView(newProgressView,progressLayout.getChildCount());
 
